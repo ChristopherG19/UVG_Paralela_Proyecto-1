@@ -5,7 +5,7 @@
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const int NUM_WAVES = 20;
+const int NUM_WAVES = 50;  // Cambia este valor según la cantidad de ondas que desees
 
 struct Wave {
     float amplitude;
@@ -13,6 +13,7 @@ struct Wave {
     float phase;
     float speed;
     float direction;
+    int startY;
 };
 
 void updateWavePosition(Wave& wave) {
@@ -36,6 +37,7 @@ int main(int argc, char* args[]) {
     std::uniform_real_distribution<float> dist_amplitude(10.0f, 100.0f);
     std::uniform_real_distribution<float> dist_frequency(0.01f, 0.1f);
     std::uniform_real_distribution<float> dist_speed(0.005f, 0.02f);
+    std::uniform_int_distribution<int> dist_startY(0, SCREEN_HEIGHT);
 
     for (int i = 0; i < NUM_WAVES; ++i) {
         Wave wave;
@@ -44,6 +46,7 @@ int main(int argc, char* args[]) {
         wave.phase = 0.0f;
         wave.speed = dist_speed(gen);
         wave.direction = 1.0f; // Dirección inicial
+        wave.startY = dist_startY(gen);
 
         waves.push_back(wave);
     }
@@ -68,13 +71,10 @@ int main(int argc, char* args[]) {
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
         for (int x = 0; x < SCREEN_WIDTH; ++x) {
-            int y = 0;
             for (const auto& wave : waves) {
-                y += static_cast<int>(wave.amplitude * sin(wave.frequency * x + wave.phase));
+                int y = wave.startY + static_cast<int>(wave.amplitude * sin(wave.frequency * x + wave.phase));
+                SDL_RenderDrawPoint(renderer, x, y);
             }
-            y = SCREEN_HEIGHT / 2 + y / NUM_WAVES;
-
-            SDL_RenderDrawPoint(renderer, x, y);
         }
 
         SDL_RenderPresent(renderer);
