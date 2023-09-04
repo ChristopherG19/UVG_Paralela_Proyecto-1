@@ -2,10 +2,12 @@
 #include <cmath>
 #include <vector>
 #include <random>
+#include <iostream>
+#include <string>
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const int NUM_WAVES = 50;
+
 const int WAVE_INTERVAL = 1000;
 const int INITIAL_WAVE_LENGTH = 100; // Longitud inicial de las ondas
 const float PI = 3.14159265359f;
@@ -35,6 +37,17 @@ void generateRandomColor(Wave& wave) {
 }
 
 int main(int argc, char* args[]) {
+
+    int NUM_WAVES = 50;
+
+    if (argc > 1) {
+        for (int i = 1; i < argc; i++) {
+            std::cout << "Cantidad de elementos a renderizar: " << i << ": " << args[i] << std::endl;
+        }
+
+        NUM_WAVES = std::stoi(args[1]);
+    }
+
     SDL_Init(SDL_INIT_VIDEO);
 
     SDL_Window* window = SDL_CreateWindow("Ondas en movimiento", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
