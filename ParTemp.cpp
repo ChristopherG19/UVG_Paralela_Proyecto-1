@@ -133,7 +133,7 @@ int main(int argc, char* args[]) {
 
         omp_init_lock(&wavesMutex);
 
-        #pragma omp parallel for
+        #pragma omp parallel for schedule(auto)
         for (size_t i = 0; i < waves.size(); ++i) {
             Wave& wave = waves[i];
 
@@ -150,7 +150,7 @@ int main(int argc, char* args[]) {
             }
 
             omp_unset_lock(&wavesMutex);
-            schedule(auto);
+            
         }
 
         SDL_RenderPresent(renderer);
