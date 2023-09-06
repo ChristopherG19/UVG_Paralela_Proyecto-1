@@ -161,8 +161,8 @@ int main(int argc, char* args[]) {
         omp_init_lock(&wavesMutex); // se inicializa el mutex
 
         #pragma omp parallel for
-        for (size_t i = 0; i < waves.size(); ++i) {
-            Wave& wave = waves[i]; // cada thread trabaja en una onda distinta
+        for (size_t w = 0; w < waves.size(); ++w) {
+            Wave& wave = waves[w]; // cada thread trabaja en una onda distinta
 
             // Actualiza la posición de la onda
             updateWavePosition(wave);
