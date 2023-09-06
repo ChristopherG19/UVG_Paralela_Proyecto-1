@@ -40,12 +40,29 @@ int main(int argc, char* args[]) {
 
     int NUM_WAVES = 50;
 
-    if (argc > 1) {
-        for (int i = 1; i < argc; i++) {
-            std::cout << "Cantidad de elementos a renderizar: " << i << ": " << args[i] << std::endl;
-        }
+    if (argc != 2) {
+        // Si no se proporciona el número correcto de argumentos, muestra un mensaje de error y salida.
+        std::cout << "Es necesario establecer la cantidad de figuras: ./prog <cantidad>" << std::endl;
+        return 1;
+    }
 
-        NUM_WAVES = std::stoi(args[1]);
+    if (argc > 1) {
+        try {
+            NUM_WAVES = std::stoi(args[1]);
+            if (NUM_WAVES == 0) {
+                // Si el valor es 0, utiliza el valor predeterminado y muestra un mensaje.
+                NUM_WAVES = 50;
+                std::cout << "Se usará el valor predeterminado de " << NUM_WAVES << std::endl;
+                std::cout << "Cantidad de elementos a renderizar: " << NUM_WAVES << std::endl;
+            } else {
+                for (int i = 1; i < argc; i++) {
+                    std::cout << "Cantidad de elementos a renderizar: " << i << ": " << args[i] << std::endl;
+                }
+            }
+        } catch (std::invalid_argument& e) {
+            std::cout << "Error: Ingreso incorrecto de datos. La cantidad de figuras debe ser un valor numérico." << std::endl;
+            return 1;
+        }
     }
 
     SDL_Init(SDL_INIT_VIDEO);
