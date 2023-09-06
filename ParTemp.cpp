@@ -102,7 +102,7 @@ int main(int argc, char* args[]) {
             frameCount = 0;
             lastUpdateTime = currentTime;
         }
-        std::cout << "FPS: " << currentFPS << std::endl;
+        // std::cout << "FPS: " << currentFPS << std::endl;
 
         if (currentTime - lastWaveTime >= WAVE_INTERVAL && waves.size() < NUM_WAVES) {
             double start_time, end_time;
