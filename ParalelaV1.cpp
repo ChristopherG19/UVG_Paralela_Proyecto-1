@@ -106,6 +106,11 @@ int main(int argc, char* args[]) {
 
     Uint32 lastWaveTime = SDL_GetTicks();
 
+    // FPS
+    Uint32 frameCount = 0;
+    Uint32 lastUpdateTime = 0;
+    float currentFPS = 0.0f;
+
     bool quit = false;
     SDL_Event e;
 
@@ -117,7 +122,20 @@ int main(int argc, char* args[]) {
             }
         }
 
+        // Conteo de FPS
+        frameCount++;
         Uint32 currentTime = SDL_GetTicks();
+        Uint32 elapsedTime = currentTime - lastUpdateTime; 
+        if (elapsedTime >= 1000) { // Actualizar los FPS por segundo
+            // Calcular FPS
+            currentFPS = static_cast<float>(frameCount) / (elapsedTime / 1000.0f);
+            // Resetear Frame
+            frameCount = 0;
+            lastUpdateTime = currentTime;
+        }   
+        std::cout << "FPS: " << currentFPS << std::endl;
+
+
         if (currentTime - lastWaveTime >= WAVE_INTERVAL && waves.size() < NUM_WAVES) {
             // Crea una nueva onda aleatoria
             Wave wave;

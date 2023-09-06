@@ -1,3 +1,14 @@
+/**
+ * Universidad del Valle de Guatemala
+ * Computación Paralela y Distribuida
+ * Proyecto#1: Screensaver
+ * Integrantes:
+ *      - Maria Isabel Solano 20504
+ *      - Andrea de Lourdes Lam 20102
+ *      - Christopher García 20541
+*/
+
+// Se importan librerías
 #include <SDL2/SDL.h>
 #include <cmath>
 #include <vector>
@@ -5,6 +16,8 @@
 #include <iostream>
 #include <string>
 
+
+// Se definen valores constantes como tamaño de pantalla, tamaños de onda, etc.
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
@@ -12,6 +25,7 @@ const int WAVE_INTERVAL = 1000;
 const int INITIAL_WAVE_LENGTH = 100; // Longitud inicial de las ondas
 const float PI = 3.14159265359f;
 
+// Se define estructura de cada onda
 struct Wave {
     float amplitude;
     float frequency;
@@ -25,6 +39,7 @@ struct Wave {
     int length;
 };
 
+// Método encargado de simular desplazamiento en las ondas
 void updateWavePosition(Wave& wave) {
     wave.phase += wave.speed;
     if (wave.phase >= 2 * PI) {
@@ -32,10 +47,12 @@ void updateWavePosition(Wave& wave) {
     }
 }
 
+// Método que genera un color RGB aleatorio
 void generateRandomColor(Wave& wave) {
     wave.color = SDL_MapRGB(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), rand() % 256, rand() % 256, rand() % 256);
 }
 
+//Main
 int main(int argc, char* args[]) {
 
     int NUM_WAVES = 50;
@@ -65,13 +82,16 @@ int main(int argc, char* args[]) {
         }
     }
 
+    // Se inicializa la biblioteca SDL
     SDL_Init(SDL_INIT_VIDEO);
 
+    // Se crea una ventana y un renderizador
     SDL_Window* window = SDL_CreateWindow("Ondas en movimiento", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    std::vector<Wave> waves;
+    std::vector<Wave> waves; // Almacena las ondas
 
+    // Configuración para generar números aleatorios
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> dist_amplitude(10.0f, 100.0f);
@@ -83,6 +103,11 @@ int main(int argc, char* args[]) {
 
     Uint32 lastWaveTime = SDL_GetTicks();
 
+    // FPS
+    Uint32 frameCount = 0;
+    Uint32 lastUpdateTime = 0;
+    float currentFPS = 0.0f;
+
     bool quit = false;
     SDL_Event e;
 
@@ -93,7 +118,20 @@ int main(int argc, char* args[]) {
             }
         }
 
+        //Conteo de FPS
+        frameCount++;
         Uint32 currentTime = SDL_GetTicks();
+        Uint32 elapsedTime = currentTime - lastUpdateTime; 
+        if (elapsedTime >= 1000) { // Actualizar los FPS por segundo
+            // Calcular FPS
+            currentFPS = static_cast<float>(frameCount) / (elapsedTime / 1000.0f);
+            // Resetear Frame
+            frameCount = 0;
+            lastUpdateTime = currentTime;
+        }   
+
+        std::cout << "FPS: " << currentFPS << std::endl;
+
         if (currentTime - lastWaveTime >= WAVE_INTERVAL && waves.size() < NUM_WAVES) {
             Wave wave;
             wave.amplitude = dist_amplitude(gen);
@@ -111,24 +149,29 @@ int main(int argc, char* args[]) {
             lastWaveTime = currentTime;
         }
 
+        // Limpia la pantalla
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
         for (auto& wave : waves) {
-            updateWavePosition(wave);
+            updateWavePosition(wave); 
 
+            // Configura el color de la onda
             SDL_SetRenderDrawColor(renderer, (wave.color >> 24) & 0xFF, (wave.color >> 16) & 0xFF, (wave.color >> 8) & 0xFF, wave.color & 0xFF);
 
             for (int i = 0; i < wave.length; ++i) {
+                // Dibuja puntos que forman la onda en movimiento
                 int x = wave.startX + static_cast<int>(i * wave.directionX);
                 int y = wave.startY + static_cast<int>(i * wave.directionY + wave.amplitude * sin(wave.frequency * i + wave.phase));
                 SDL_RenderDrawPoint(renderer, x, y);
             }
         }
 
+        // Renderiza la escena
         SDL_RenderPresent(renderer);
     }
 
+    // Limpia y cierra
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
