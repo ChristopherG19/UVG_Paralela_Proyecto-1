@@ -35,8 +35,8 @@ Instrucciones ejemplo para secuencial:
 	./Secuencialv2 <número de elementos>
 
 Instrucciones ejemplo para paralelo:
-g++ -o par ParalelaV1.cpp -lSDL2 -fopenmp
-./par <num_elementos>
+	g++ -o par ParalelaV1.cpp -lSDL2 -fopenmp
+	./par <num_elementos>
 
 ```
 Una vez compilado, puedes ejecutar el programa especificando la cantidad deseada de ondas a renderizar de la siguiente manera:
@@ -46,7 +46,7 @@ Copy code
 ./screensaver <cantidad>
 Si no se proporciona la cantidad como argumento, se utilizará un valor predeterminado de 50 ondas.
 
-Notas
+## Notas
 El programa utiliza OpenMP para paralelizar el cálculo de las posiciones de las ondas, lo que permite un rendimiento mejorado en sistemas multiprocesador.
 El código fuente proporcionado incluye comentarios detallados para ayudar a comprender su funcionamiento.
 ¡Disfruta de tu screensaver de ondas en movimiento!
