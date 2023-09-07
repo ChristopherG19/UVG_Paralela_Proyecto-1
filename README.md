@@ -5,7 +5,7 @@ Este proyecto es parte del curso de Computación Paralela y Distribuida de la Un
 ## Integrantes del equipo
 
 - Maria Isabel Solano (20504)
-- Andrea de Lourdes Lam (20102)
+- Andrea Lam (20102)
 - Christopher García (20541)
 
 ## Descripción del Programa
