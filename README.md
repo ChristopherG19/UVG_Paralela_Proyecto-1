@@ -41,9 +41,9 @@ Instrucciones ejemplo para paralelo:
 ```
 Una vez compilado, puedes ejecutar el programa especificando la cantidad deseada de ondas a renderizar de la siguiente manera:
 
-bash
-Copy code
+```bash
 ./screensaver <cantidad>
+```
 Si no se proporciona la cantidad como argumento, se utilizará un valor predeterminado de 50 ondas.
 
 ## Notas
