@@ -94,6 +94,8 @@ int main(int argc, char* args[]) {
     bool quit = false;
     SDL_Event e;
 
+    std::vector<float> FPSs;
+
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
@@ -109,7 +111,8 @@ int main(int argc, char* args[]) {
             frameCount = 0;
             lastUpdateTime = currentTime;
         }
-        // std::cout << "FPS: " << currentFPS << std::endl;
+        std::cout << "FPS: " << currentFPS << std::endl;
+        FPSs.push_back(currentFPS); // guardar en el vector 
 
         if (currentTime - lastWaveTime >= WAVE_INTERVAL && waves.size() < NUM_WAVES) {
             // Medir el tiempo de inicio de la creación de la onda
@@ -160,6 +163,18 @@ int main(int argc, char* args[]) {
         // Renderiza la escena
         SDL_RenderPresent(renderer);
     }
+
+    float sum = 0.0f;
+    for (size_t i = 0; i < FPSs.size(); ++i) {
+        sum += FPSs[i];
+    }
+
+    // Calcular promedio
+    float average = sum / FPSs.size();
+
+    // Mostrar promedio 
+    std::cout << "Promedio de FPS: " << average << std::endl;
+
 
     // Limpia y cierra
     SDL_DestroyRenderer(renderer);
